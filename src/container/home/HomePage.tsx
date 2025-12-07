@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback, type FC } from "react";
+import { useEffect, useState, useCallback, useLayoutEffect, useMemo, useRef, type FC } from "react";
 import styles from "./HomePage.module.css";
 import { useFetch } from "../../hooks/useFetch";
 import { API_URL } from "../../types/constants";
@@ -10,6 +10,9 @@ export const HomePage: FC = () => {
   const data = useFetch<ProductType[]>({ url: `${API_URL}/products` });
   const [filteredData, setFilteredData] = useState<ProductType[]>([]);
 
+  const containerRef = useRef<HTMLDivElement | null>(null);
+  const [columns, setColumns] = useState<number>(3);
+
   console.log("HomePage render - data length:", data?.length ?? 0);
 
   useEffect(() => {
@@ -18,63 +21,49 @@ export const HomePage: FC = () => {
     }
   }, [data]);
 
-  // useEffect(() => {
-  //   console.log(`Mounted`);
-
-  //   return () => {
-  //     console.log(`Unmounted`);
-  //   };
-  // }, []);
-
   const handleFilter = useCallback((searchText: string) => {
     console.log("handleFilter called with:", searchText);
     if (searchText === "") {
-      setFilteredData(data ?? []);
+      // ensure new array reference so React notices change
+      setFilteredData((data ?? []).slice());
       return;
     }
     setFilteredData(
       (data ?? []).filter((item) =>
-        ((item?.title ?? '').toLowerCase().includes(searchText.toLowerCase())) ||
-        ((item?.description ?? '').toLowerCase().includes(searchText.toLowerCase()))
+        ((item?.title ?? "").toLowerCase().includes(searchText.toLowerCase())) ||
+        ((item?.description ?? "").toLowerCase().includes(searchText.toLowerCase()))
       )
     );
   }, [data]);
-
-  // const handleFilter = (searchText: string) => {
-  //   console.log("handleFilter called with:", searchText);
-  //   if (searchText === "") {
-  //     setFilteredData(data ?? []);
-  //     return;
-  //   }
-  //   setFilteredData(
-  //     (data ?? []).filter((item) =>
-  //       ((item?.title ?? '').toLowerCase().includes(searchText.toLowerCase())) ||
-  //       ((item?.description ?? '').toLowerCase().includes(searchText.toLowerCase()))
-  //     )
-  //   );
-  // };
 
   useEffect(() => {
     console.log("handleFilter identity changed");
   }, [handleFilter]);
 
+  useLayoutEffect(() => {
+    const el = containerRef.current;
+    if (!el) return;
+    const width = el.getBoundingClientRect().width;
+    const cols = width < 600 ? 1 : width < 900 ? 2 : 3;
+    setColumns(cols);
+    console.log("useLayoutEffect measured width", width, "-> columns", cols);
+  }, [filteredData]);
+
+  const productList = useMemo(
+    () =>
+      (filteredData ?? []).map((item) => (
+        <Product key={`${item.id}${item.title}`} id={item.id} title={item.title} price={item.price} image={item.image} />
+      )),
+    [filteredData]
+  );
+
   return (
     <>
       <div>
-        <Search filterData = {handleFilter}/>
+        <Search filterData={handleFilter} />
       </div>
-      <div className={styles.productListContainer}>
-        {filteredData &&
-          filteredData?.map((item) => {
-            return (
-              <Product
-                key={`${item.id}${item.title}`}
-                title={item.title}
-                price={item.price}
-                image={item.image}
-              />
-            );
-          })}
+      <div ref={containerRef} className={styles.productListContainer} data-columns={columns}>
+        {productList}
       </div>
     </>
   );

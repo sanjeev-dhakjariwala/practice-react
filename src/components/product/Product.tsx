@@ -1,8 +1,14 @@
-import type { FC } from "react";
+import React, { useMemo } from "react";
 import styles from "./Product.module.css";
 import type { ProductType } from "../../types/type";
+import { useFavorites } from "../../context/FavoriteContext";
 
-export const Product: FC<ProductType> = ({ title, price, image }) => {
+export const Product = ({ id, title, price, image }: ProductType) => {
+  const { state, toggle } = useFavorites();
+
+  const isFav = useMemo(() => state.ids.includes(id), [state.ids, id]);
+  const formattedPrice = useMemo(() => `₹${price}`, [price]);
+
   return (
     <div className={styles.productInfoContainer}>
       <div>
@@ -13,8 +19,13 @@ export const Product: FC<ProductType> = ({ title, price, image }) => {
       </div>
       <div>
         <span>
-          ₹<strong>{price}</strong>
+          <strong>{formattedPrice}</strong>
         </span>
+      </div>
+      <div>
+        <button onClick={() => toggle(id)} aria-pressed={isFav}>
+          {isFav ? "★ Unfavorite" : "☆ Favorite"}
+        </button>
       </div>
     </div>
   );
