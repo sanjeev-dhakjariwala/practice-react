@@ -1,4 +1,4 @@
-import { useEffect, type FC } from "react";
+import { useEffect, useState, type FC } from "react";
 import styles from "./HomePage.module.css";
 import { useFetch } from "../../hooks/useFetch";
 import { API_URL } from "../../types/constants";
@@ -8,6 +8,14 @@ import { Search } from "../../components/search/Search";
 
 export const HomePage: FC = () => {
   const data = useFetch<ProductType[]>({ url: `${API_URL}/products` });
+  const [filteredData, setFilteredData] = useState<ProductType[]>([]);
+
+  useEffect(() => {
+    if (data && data.length > 0) {
+      setFilteredData(data);
+    }
+  }, [data]);
+
   useEffect(() => {
     console.log(`Mounted`);
 
@@ -21,8 +29,8 @@ export const HomePage: FC = () => {
         <Search />
       </div>
       <div className={styles.productListContainer}>
-        {data &&
-          data?.map((item) => {
+        {filteredData &&
+          filteredData?.map((item) => {
             return (
               <Product
                 key={`${item.id}${item.title}`}
