@@ -2,10 +2,10 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import styles from "./App.module.css";
 import { Footer } from "./container/Footer";
 import { Header } from "./container/Header";
-import { HomePage } from "./container/HomePage";
-import { Furniture } from "./container/Furniture";
-import { Beauty } from "./container/Beauty";
-import { Electronics } from "./container/Electronics";
+import { HomePage } from "./container/home/HomePage";
+import { Furniture } from "./container/furniture/Furniture";
+import { Beauty } from "./container/beauty/Beauty";
+import { Electronics } from "./container/electronics/Electronics";
 
 function App() {
   return (
