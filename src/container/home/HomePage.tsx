@@ -1,4 +1,4 @@
-import { useEffect, useState, type FC } from "react";
+import { useEffect, useState, useCallback, type FC } from "react";
 import styles from "./HomePage.module.css";
 import { useFetch } from "../../hooks/useFetch";
 import { API_URL } from "../../types/constants";
@@ -10,21 +10,24 @@ export const HomePage: FC = () => {
   const data = useFetch<ProductType[]>({ url: `${API_URL}/products` });
   const [filteredData, setFilteredData] = useState<ProductType[]>([]);
 
+  console.log("HomePage render - data length:", data?.length ?? 0);
+
   useEffect(() => {
     if (data && data.length > 0) {
       setFilteredData(data ?? []);
     }
   }, [data]);
 
-  useEffect(() => {
-    console.log(`Mounted`);
+  // useEffect(() => {
+  //   console.log(`Mounted`);
 
-    return () => {
-      console.log(`Unmounted`);
-    };
-  }, []);
+  //   return () => {
+  //     console.log(`Unmounted`);
+  //   };
+  // }, []);
 
-  function handleFilter(searchText: string) {
+  const handleFilter = useCallback((searchText: string) => {
+    console.log("handleFilter called with:", searchText);
     if (searchText === "") {
       setFilteredData(data ?? []);
       return;
@@ -35,7 +38,25 @@ export const HomePage: FC = () => {
         ((item?.description ?? '').toLowerCase().includes(searchText.toLowerCase()))
       )
     );
-  }
+  }, [data]);
+
+  // const handleFilter = (searchText: string) => {
+  //   console.log("handleFilter called with:", searchText);
+  //   if (searchText === "") {
+  //     setFilteredData(data ?? []);
+  //     return;
+  //   }
+  //   setFilteredData(
+  //     (data ?? []).filter((item) =>
+  //       ((item?.title ?? '').toLowerCase().includes(searchText.toLowerCase())) ||
+  //       ((item?.description ?? '').toLowerCase().includes(searchText.toLowerCase()))
+  //     )
+  //   );
+  // };
+
+  useEffect(() => {
+    console.log("handleFilter identity changed");
+  }, [handleFilter]);
 
   return (
     <>

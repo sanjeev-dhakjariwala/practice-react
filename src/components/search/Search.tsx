@@ -1,8 +1,8 @@
 import styles from "./Search.module.css";
 import type { SearchProps } from "../../types/type";
-import { useState } from "react";
+import React, { useState, memo } from "react";
 
-export function Search({ placeholder = "Search products...", filterData }: SearchProps) {
+function SearchComponent({ placeholder = "Search products...", filterData }: SearchProps) {
   const [search, setSearch] = useState<string>("");
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
@@ -25,3 +25,5 @@ export function Search({ placeholder = "Search products...", filterData }: Searc
     </div>
   );
 }
+
+export const Search = memo(SearchComponent);
