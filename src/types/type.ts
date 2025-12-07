@@ -10,3 +10,7 @@ export interface ProductType {
   category?: string;
   image?: string;
 }
+
+export interface SearchProps {
+  placeholder?: string;
+}

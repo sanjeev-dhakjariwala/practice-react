@@ -4,6 +4,7 @@ import { useFetch } from "../../hooks/useFetch";
 import { API_URL } from "../../types/constants";
 import type { ProductType } from "../../types/type";
 import { Product } from "../../components/product/Product";
+import { Search } from "../../components/search/Search";
 
 export const HomePage: FC = () => {
   const data = useFetch<ProductType[]>({ url: `${API_URL}/products` });
@@ -12,21 +13,26 @@ export const HomePage: FC = () => {
 
     return () => {
       console.log(`Unmounted`);
-    }
-  }, [])
+    };
+  }, []);
   return (
-    <div className={styles.productListContainer}>
-      {data &&
-        data?.map((item) => {
-          return (
-            <Product
-              key={`${item.id}${item.title}`}
-              title={item.title}
-              price={item.price}
-              image={item.image}
-            />
-          );
-        })}
-    </div>
+    <>
+      <div>
+        <Search />
+      </div>
+      <div className={styles.productListContainer}>
+        {data &&
+          data?.map((item) => {
+            return (
+              <Product
+                key={`${item.id}${item.title}`}
+                title={item.title}
+                price={item.price}
+                image={item.image}
+              />
+            );
+          })}
+      </div>
+    </>
   );
 };
