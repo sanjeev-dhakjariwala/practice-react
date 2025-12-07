@@ -23,10 +23,27 @@ export const HomePage: FC = () => {
       console.log(`Unmounted`);
     };
   }, []);
+
+  function handleFilter(searchText: string) {
+    if (searchText === "") {
+      setFilteredData(data);
+    }
+    setFilteredData(
+      filteredData.filter((item) => {
+        if (
+          item?.title?.toLowerCase().includes(searchText.toLowerCase()) ||
+          item?.description?.toLowerCase().includes(searchText.toLowerCase())
+        ) {
+          return item;
+        }
+      })
+    );
+  }
+
   return (
     <>
       <div>
-        <Search />
+        <Search filterData = {handleFilter}/>
       </div>
       <div className={styles.productListContainer}>
         {filteredData &&

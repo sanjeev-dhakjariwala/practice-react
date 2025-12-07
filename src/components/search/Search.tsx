@@ -2,10 +2,14 @@ import styles from "./Search.module.css";
 import type { SearchProps } from "../../types/type";
 import { useState } from "react";
 
-export function Search({ placeholder = "Search products..." }: SearchProps) {
+export function Search({ placeholder = "Search products...", filterData }: SearchProps) {
   const [search, setSearch] = useState<string>("");
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setSearch(e.target.value);
+    const value = e.target.value;
+    setSearch(value);
+    if(filterData) {
+      filterData(value);
+    }
   };
 
   return (

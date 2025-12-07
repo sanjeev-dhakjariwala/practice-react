@@ -13,4 +13,5 @@ export interface ProductType {
 
 export interface SearchProps {
   placeholder?: string;
+  filterData?: (searchText: string) => void;
 }
