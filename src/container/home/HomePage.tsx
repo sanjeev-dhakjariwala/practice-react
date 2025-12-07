@@ -12,7 +12,7 @@ export const HomePage: FC = () => {
 
   useEffect(() => {
     if (data && data.length > 0) {
-      setFilteredData(data);
+      setFilteredData(data ?? []);
     }
   }, [data]);
 
@@ -26,17 +26,14 @@ export const HomePage: FC = () => {
 
   function handleFilter(searchText: string) {
     if (searchText === "") {
-      setFilteredData(data);
+      setFilteredData(data ?? []);
+      return;
     }
     setFilteredData(
-      filteredData.filter((item) => {
-        if (
-          item?.title?.toLowerCase().includes(searchText.toLowerCase()) ||
-          item?.description?.toLowerCase().includes(searchText.toLowerCase())
-        ) {
-          return item;
-        }
-      })
+      (data ?? []).filter((item) =>
+        ((item?.title ?? '').toLowerCase().includes(searchText.toLowerCase())) ||
+        ((item?.description ?? '').toLowerCase().includes(searchText.toLowerCase()))
+      )
     );
   }
 
