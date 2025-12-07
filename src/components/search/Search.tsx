@@ -7,9 +7,10 @@ export function Search({ placeholder = "Search products...", filterData }: Searc
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     setSearch(value);
-    if(filterData) {
+    if (filterData) {
       filterData(value);
     }
+    console.log(value);
   };
 
   return (
@@ -19,6 +20,7 @@ export function Search({ placeholder = "Search products...", filterData }: Searc
         className={styles.searchInput}
         placeholder={placeholder}
         onChange={handleSearch}
+        value={search}
       />
     </div>
   );
