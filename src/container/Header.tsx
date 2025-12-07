@@ -8,19 +8,19 @@ export const Header: FC = () => {
       <nav className={styles.nav}>
         <ul className={styles.navList}>
           <li className={styles.navItem}>
-            <Link to="/home">Home</Link>
+            <Link to="/home" className={styles.navLink}>Home</Link>
           </li>
           <li className={styles.navItem}>
-            <Link to="/electronics">Electronics</Link>
+            <Link to="/electronics" className={styles.navLink}>Electronics</Link>
           </li>
           <li className={styles.navItem}>
-            <Link to="/fashion">Fashion</Link>
+            <Link to="/fashion" className={styles.navLink}>Fashion</Link>
           </li>
           <li className={styles.navItem}>
-            <Link to="/beauty">Beauty</Link>
+            <Link to="/beauty" className={styles.navLink}>Beauty</Link>
           </li>
           <li className={styles.navItem}>
-            <Link to="/furniture">Furniture</Link>
+            <Link to="/furniture" className={styles.navLink}>Furniture</Link>
           </li>
         </ul>
       </nav>

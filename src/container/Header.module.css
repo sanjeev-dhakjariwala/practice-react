@@ -18,3 +18,12 @@
   padding: 0.5rem 1rem;
 }
 
+.navLink {
+  text-decoration: none;
+  color: inherit;
+}
+
+.navLink:hover {
+  text-decoration: underline;
+}
+
